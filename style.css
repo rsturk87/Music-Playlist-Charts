@@ -1,0 +1,73 @@
+@import url('https://fonts.googleapis.com/css2?family=Mulish:wght@200;300;400;600;700;800;900&display=swap');
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Mulish', sans-serif;
+    color: rgb(56, 56, 56);
+}
+
+.header {
+    background-color: #fff;
+    position: relative;
+    width: 100vw;
+    margin-top: 0;
+}
+
+.header h1 {
+    font-size: 3em;
+    font-weight: 800;
+    padding-top: 20px;
+    margin-left: 20vw;
+    text-decoration: underline red;
+}
+
+.header h2 {
+    font-size: .8em;
+    font-weight: 200;
+    padding-bottom: 30px;
+    margin-left: 20vw;
+}
+
+.content {
+    width: 60vw;
+    margin-left: 20vw;
+}
+
+#myChart {
+    width: 100px;
+}
+
+.graph-title {
+    text-align: left;
+    font-size: 2em;
+    font-weight: 800;
+    padding-top: 20px;
+}
+
+.graph-title.other-titles{
+    padding-top: 55px;
+}
+
+.content h2 {
+    font-size: .8em;
+    font-weight: 200;
+    padding-bottom: 5px;
+}
+
+.graph-div, .artist-div{
+    width: 60vw;
+    margin: 0 auto;
+    position: relative;
+    background-color: #f8f8f8;
+}
+
+@media (max-width: 700px) {
+    .content {
+        width: 100vw;
+        margin-left: 5vw;
+    }
+  }
+
+
+

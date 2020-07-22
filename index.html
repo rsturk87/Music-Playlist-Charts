@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="reset.css" rel='stylesheet' type='text/css' />
+    <link href="style.css" rel='stylesheet' type='text/css' />
+    <title>My Playlist on Charts</title>
+    <script type='text/javascript' src='https://cdn.jsdelivr.net/npm/chart.js@2.9.3/dist/Chart.min.js'></script>
+</head>
+
+<body>
+    <div class="header">
+        <h1><span></span>My Playlist on Charts</span></h1>
+        </span><h2>400 songs analysis</h2></span>
+    </div>
+
+    <div class="content">    
+        <h1 class="graph-title">Top Genres</h1>
+        <h2>numbers of songs by genre</h2>
+        <div class="graph-div">
+            <canvas id="genreChart"></canvas>
+        </div>
+
+        <h1 class="graph-title other-titles">Top Artists</h1>
+        <h2>they are always on your playlist</h2>
+        <div class="artist-div">
+            <canvas id="artistChart"></canvas>
+        </div>
+
+        <h1 class="graph-title other-titles">Nostalgic or Modern</h1>
+        <h2>songs per decade</h2>
+        <div class="graph-div">
+            <canvas id="yearChart"></canvas>
+        </div>
+    </div>
+    
+    <script type='text/javascript' src='script.js'></script>
+</body>
+</html>
