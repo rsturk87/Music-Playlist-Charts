@@ -1,9 +1,4 @@
-(async ( ) => {
-
-    //lib
-    const replaceAll = (from, to, text) => text.split(from).join(to);
-    String.prototype.replaceAll = function(from, to){ return this.split(from).join(to);};
-    
+(async ( ) => {    
 
     //get data from json
     let myPlaylist = [];
@@ -15,6 +10,81 @@
     myPlaylist = await getMusicList('./data/my-playlist.json');
 
 
+    //genre count
+    let genreCountList = [];
+    const genreCount = await myPlaylist.reduce((res, music) => {
+        if(res[music.genre]) res[music.genre] += 1;
+        else res[music.genre] = 1;
+        return res;
+    }, {});
+    genreCountList = genreCount;
+
+
+    //top 5 genres
+    const topFiveGenre = [];
+    for (var genre in genreCountList) {
+        topFiveGenre.push([genre, genreCountList[genre]]);
+    };
+    
+    topFiveGenre.sort(function(a, b) {
+        return b[1] - a[1];
+    });
+    const topGenre1 = topFiveGenre[0];
+    const topGenre2 = topFiveGenre[1];
+    const topGenre3 = topFiveGenre[2];
+    const topGenre4 = topFiveGenre[3];
+    const topGenre5 = topFiveGenre[4];
+
+
+    //draw genre chart
+    var ctx = document.getElementById('genreChart');
+    var genreChart = new Chart(ctx, {
+    type: 'polarArea',
+    data: {
+        labels: [topGenre1[0], topGenre2[0], topGenre3[0], topGenre4[0], topGenre5[0]],
+        datasets: [{
+            label: '# of Musics',
+            data: [topGenre1[1], topGenre2[1], topGenre3[1], topGenre4[1], topGenre5[1]],
+            backgroundColor: [
+                'rgba(0,85,130, 0.7)',
+                'rgba(0,134,173, 0.7)',
+                'rgba(0,194,199, 0.7)',
+                'rgba(151,235,219, 0.7)',
+                'rgba(218,248,227, 0.7)'
+            ],
+            borderColor: [
+                'rgba(0,85,130, 0.8)',
+                'rgba(0,134,173, 0.8)',
+                'rgba(0,194,199, 0.8)',
+                'rgba(151,235,219, 0.8)',
+                'rgba(218,248,227, 0.8)'
+            ],
+            borderWidth: 1
+        }]
+        },
+        options: {
+            responsive: true,
+            legend: {
+                position: 'bottom',
+            },
+            title: {
+                display: false,
+                text: 'Top 5 Genres'
+            },
+            scale: {
+                ticks: {
+                    beginAtZero: true
+                },
+                reverse: false
+            },
+            animation: {
+                animateRotate: true,
+                animateScale: true
+            }
+        }
+    });
+
+    
     //artists count
     let artistCountList = [];
     const artistCount = await myPlaylist.reduce((res, music) => {
@@ -97,95 +167,11 @@
             display: true,
             position: 'bottom'
         },
-        tooltips: {
-            titleFontFamily: 'Mulish',
-            backgroundColor: 'rgba(0,0,0,0.3)',
-            titleFontColor: 'rgb(56, 56, 56)',
-            caretSize: 5,
-            cornerRadius: 2,
-            xPadding: 10,
-            yPadding: 10
-        }
     };
     var artistsChart = new Chart(ctxArtists, {
         type: 'bar',
         data: artistsData,
         options: artistsOptions,
-    });
-    
-
-    //genre count
-    let genreCountList = [];
-    const genreCount = await myPlaylist.reduce((res, music) => {
-        if(res[music.genre]) res[music.genre] += 1;
-        else res[music.genre] = 1;
-        return res;
-    }, {});
-    genreCountList = genreCount;
-
-
-    //top 5 genres
-    const topFiveGenre = [];
-    for (var genre in genreCountList) {
-        topFiveGenre.push([genre, genreCountList[genre]]);
-    };
-    
-    topFiveGenre.sort(function(a, b) {
-        return b[1] - a[1];
-    });
-    const topGenre1 = topFiveGenre[0];
-    const topGenre2 = topFiveGenre[1];
-    const topGenre3 = topFiveGenre[2];
-    const topGenre4 = topFiveGenre[3];
-    const topGenre5 = topFiveGenre[4];
-
-
-    //draw genre chart
-    var ctx = document.getElementById('genreChart');
-    var genreChart = new Chart(ctx, {
-    type: 'polarArea',
-    data: {
-        labels: [topGenre1[0], topGenre2[0], topGenre3[0], topGenre4[0], topGenre5[0]],
-        datasets: [{
-            label: '# of Musics',
-            data: [topGenre1[1], topGenre2[1], topGenre3[1], topGenre4[1], topGenre5[1]],
-            backgroundColor: [
-                'rgba(0,85,130, 0.7)',
-                'rgba(0,134,173, 0.7)',
-                'rgba(0,194,199, 0.7)',
-                'rgba(151,235,219, 0.7)',
-                'rgba(218,248,227, 0.7)'
-            ],
-            borderColor: [
-                'rgba(0,85,130, 0.8)',
-                'rgba(0,134,173, 0.8)',
-                'rgba(0,194,199, 0.8)',
-                'rgba(151,235,219, 0.8)',
-                'rgba(218,248,227, 0.8)'
-            ],
-            borderWidth: 1
-        }]
-        },
-        options: {
-            responsive: true,
-            legend: {
-                position: 'bottom',
-            },
-            title: {
-                display: false,
-                text: 'Top 5 Genres'
-            },
-            scale: {
-                ticks: {
-                    beginAtZero: true
-                },
-                reverse: false
-            },
-            animation: {
-                animateRotate: true,
-                animateScale: true
-            }
-        }
     });
 
 
@@ -231,15 +217,6 @@
         else return res;
     }, 0);
 
-    // let total = 0;
-    // for (key in yearList) {
-    //     if (key.indexOf('196') > -1) total += yearList[key];
-    // }
-
-    //transformando um objeto em array de objetos
-    // const data = { 1960: 1, 1961: 3, 1962: 5, 1987: 10 };
-    // const transformed = Object.keys(data).reduce((res, key) => [...res, { [key]: data[key] }], []);
-    // console.log(transformed);
 
     //draw years chart
     var ctxYears = document.getElementById('yearChart');
@@ -284,15 +261,6 @@
             display: true,
             position: 'bottom'
         },
-        tooltips: {
-            titleFontFamily: 'Mulish',
-            backgroundColor: 'rgba(0,0,0,0.3)',
-            titleFontColor: 'rgb(56, 56, 56)',
-            caretSize: 5,
-            cornerRadius: 2,
-            xPadding: 10,
-            yPadding: 10
-        }
     };
     var yearsChart = new Chart(ctxYears, {
         type: 'line',
@@ -301,4 +269,165 @@
     });
 
 
+    //songs by bpm
+    const wacked = myPlaylist.filter((songs) => {
+        return songs.energy < 20;
+    });
+    const wackedCount = wacked.length;
+
+    const sluggish = myPlaylist.filter((songs) => {
+        return songs.energy >= 20 & songs.energy < 40;
+    });
+    const sluggishCount = sluggish.length;
+    
+    const moderate = myPlaylist.filter((songs) => {
+        return songs.energy >= 40 & songs.energy < 60;
+    });
+    const moderateCount = moderate.length; 
+    
+    const energetic = myPlaylist.filter((songs) => {
+        return songs.energy >= 60 & songs.energy < 80;
+    });
+    const energeticCount = energetic.length; 
+    
+    const bloodPumping = myPlaylist.filter((songs) => {
+        return songs.energy >= 80;
+    });
+    const bloodPumpingCount = bloodPumping.length; 
+
+
+    //draw energy chart
+    var ctxEnergy = document.getElementById('energyChart');
+    var energyData  = {
+        labels: [ 'wacked', 'sluggish', 'moderate', 'energetic', 'blood-pumping'],
+        datasets: [{
+                label: 'songs',
+                backgroundColor: 'rgba(0,134,173, 0.3)',
+                pointBackgroundColor: 'white',
+                borderWidth: 1,
+                borderColor: 'rgba(56, 56, 56, 0.5)',
+                data: [wackedCount, sluggishCount, moderateCount, energeticCount, bloodPumpingCount]
+        }]
+    };
+    var energyOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        animation: {
+            easing: 'easeInOutQuad',
+            duration: 2000
+        },
+        scales: {
+            xAxes: [{
+                gridLines: {
+                    color: 'rgba(200, 200, 200, 0.05)',
+                    lineWidth: 2
+                }
+            }],
+            yAxes: [{
+                gridLines: {
+                    color: 'rgba(200, 200, 200, 0.08)',
+                    lineWidth: 2
+                }
+            }]
+        },
+        elements: {
+            line: {
+                tension: 0.3
+            }
+        },
+        legend: {
+            display: true,
+            position: 'bottom'
+        },
+    };
+    var energyChart = new Chart(ctxEnergy, {
+        type: 'line',
+        data: energyData,
+        options: energyOptions,
+    });
+
+    
+    //selecting songs with less and more energy
+    const findTheEnergy = myPlaylist.sort(function (a, b) {
+        return a.energy - b.energy
+    });
+    
+    const minEnergy = findTheEnergy[0];
+    const maxEnergy = findTheEnergy[findTheEnergy.length - 1];
+
+    const lessEnergyDiv = document.querySelector('#less-energy');
+    const lessEnergySong = minEnergy.title + " by: " + minEnergy.artist;
+    lessEnergyDiv.append(lessEnergySong);
+
+    const moreEnergyDiv = document.querySelector('#more-energy');
+    const moreEnergySong = maxEnergy.title + " by: " + maxEnergy.artist;
+    moreEnergyDiv.append(moreEnergySong);
+
+
+    //songs by valence
+    const sad = myPlaylist.filter((songs) => {
+        return songs.valence <= 30;
+    });
+    const sadCount = sad.length;
+
+    const happy = myPlaylist.filter((songs) => {
+        return songs.valence >= 70;
+    });
+    const happyCount = happy.length;
+
+
+    //draw valence chart
+    var ctxValence = document.getElementById('valenceChart');
+    var valenceData  = {
+        labels: [ 'happy', 'sad' ],
+        datasets: [{
+                label: 'songs',
+                data: [happyCount, sadCount],
+                backgroundColor: [
+                    'rgba(151,235,219, 0.7)',
+                    'rgba(0,85,130, 0.7)'
+                ],
+                borderColor: [
+                    'rgba(151,235,219, 0.8)',
+                    'rgba(0,85,130, 0.8)'
+                ],
+                borderWidth: 1
+        }]
+    };
+    var valenceOptions = {
+        responsive: true,
+        maintainAspectRatio: true,
+        animation: {
+            easing: 'easeInOutQuad',
+            duration: 2000
+        },
+        legend: {
+            display: true,
+            position: 'bottom'
+        },
+    };
+    var valenceChart = new Chart(ctxValence, {
+        type: 'doughnut',
+        data: valenceData,
+        options: valenceOptions,
+    });
+
+
+    //selecting songs with less and more valence
+    const findTheValence = myPlaylist.sort(function (a, b) {
+        return a.valence - b.valence
+    });
+    
+    const minValence = findTheValence[0];
+    const maxValence = findTheValence[findTheValence.length - 1];
+
+    const lessValenceDiv = document.querySelector('#less-valence');
+    const lessValenceSong = minValence.title + " by: " + minValence.artist;
+    lessValenceDiv.append(lessValenceSong);
+
+    const moreValenceDiv = document.querySelector('#more-valence');
+    const moreValenceSong = maxValence.title + " by: " + maxValence.artist;
+    moreValenceDiv.append(moreValenceSong);
+    
+    
 })( );
